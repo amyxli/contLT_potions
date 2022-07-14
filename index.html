@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+  <head>
+    <title>UNSW CCS</title>
+    <script src="jspsych/jspsych.js"></script>    
+    <script src="jspsych/plugin-html-button-response.js"></script>
+    <script src="jspsych/plugin-preload.js"></script>
+    <script src="jspsych/plugin-survey.js"></script>
+
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
+  </head>
+
+  <style>
+    .row.centered {
+      height: 35vh;
+      display: flex;
+      align-items: top;
+      justify-content: top;
+    }
+  
+    .tube {
+      display: inline-block;
+      width: 2cm;
+      margin-left:0.7cm;
+      margin-right:0.7cm; 
+      border-style: solid; 
+      position:relative;
+    }
+
+    .tube-content{
+      position:absolute; 
+      bottom:0;
+      width: 2cm;
+      height: 2cm;
+      color:red; 
+    }
+
+  </style>
+
+  <script>
+  
+  /* initialize jsPsych */
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  /* create timeline */
+  var timeline = [];
+
+  /* define functions needed */
+
+  function shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+  }
+
+  function saveData(name, data){
+    	var xhr = new XMLHttpRequest();
+    	xhr.open('POST', 'save_data.php'); // 'write_data.php' is the path to the php file described above.
+    	xhr.setRequestHeader('Content-Type', 'application/json');
+    	xhr.send(JSON.stringify({filename: filename, filedata: data})); //specify a variable "filename"
+  };
+
+  window.onbeforeunload = function(){
+    	return "Are you sure you want to leave the experiment?";
+  };
+
+  /* define images needed */
+
+
+  /* preload images */
+
+  /*var preload = {
+    type: jsPsychPreload,
+    images: images
+  };
+
+  timeline.push(preload);*/
+
+  /* variables for trial options */
+
+
+  /* the trials */
+
+  var trial = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<div class="row centered">' +
+              '<img src = "./img/tube.png">' +
+              '</div>' +
+
+          '<div class="tube">'+ // parent div
+            '<div class = "tube-content">' +
+                ' Potion B' +
+              '</div>' +
+          '</div>' +
+
+          '<div class="tube">'+ // parent div
+            '<div class = "tube-content">' +
+                ' Potion C' +
+              '</div>' +
+          '</div>' +
+
+          '<div class="tube">'+ // parent div
+            '<div class = "tube-content">' +
+                ' Potion D' +
+              '</div>' +
+          '</div>' +
+
+        '</div>',
+    choices: ['Mix', 'Pass'],
+    prompt: "<p>Make this potion?</p>"
+  };
+
+  timeline.push(trial)
+
+  /* start the experiment */
+  jsPsych.run(timeline);
+
+  </script>
+</html>
