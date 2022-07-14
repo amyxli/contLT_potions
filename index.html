@@ -7,7 +7,7 @@
     <script src="jspsych/plugin-html-button-response.js"></script>
     <script src="jspsych/plugin-preload.js"></script>
     <script src="jspsych/plugin-survey.js"></script>
-
+    <script src="jspsych/plugin-canvas-button-response.js"></script>
     <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
   </head>
@@ -23,9 +23,8 @@
     .tube {
       display: inline-block;
       width: 2cm;
-      margin-left:0.7cm;
-      margin-right:0.7cm; 
-      border-style: solid; 
+      margin-left:1cm;
+      margin-right:1cm; 
       position:relative;
     }
 
@@ -38,6 +37,7 @@
     }
 
   </style>
+
 
   <script>
   
@@ -97,34 +97,43 @@
 
   /* variables for trial options */
 
-
   /* the trials */
 
+  function loadImage(src, onload) {
+    // http://www.thefutureoftheweb.com/blog/image-onload-isnt-being-called
+    var img = new Image();
+    
+    img.onload = onload;
+    img.src = src;
+
+    return img;
+  }
+
+  function fillTube(canvas, width, length, color) {
+    var ctx = canvas.getContext("2d");
+    var img1 = loadImage("./img/tube.png", main);
+
+    function main() {
+          ctx.drawImage(img1, 0, 0);
+    }
+
+    // part where you draw the tube content
+    ctx.beginPath();
+    ctx.rect(20, 20, width, length);
+    ctx.stroke();
+
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // part where you put the tube container
+    ctx.drawImage(img1,0,0);
+  }
+
   var trial = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: '<div class="row centered">' +
-              '<img src = "./img/tube.png">' +
-              '</div>' +
-
-          '<div class="tube">'+ // parent div
-            '<div class = "tube-content">' +
-                ' Potion B' +
-              '</div>' +
-          '</div>' +
-
-          '<div class="tube">'+ // parent div
-            '<div class = "tube-content">' +
-                ' Potion C' +
-              '</div>' +
-          '</div>' +
-
-          '<div class="tube">'+ // parent div
-            '<div class = "tube-content">' +
-                ' Potion D' +
-              '</div>' +
-          '</div>' +
-
-        '</div>',
+    type: jsPsychCanvasButtonResponse,
+    stimulus: function(c){
+          return fillTube(c, 100, 100, 'blue')
+        },
     choices: ['Mix', 'Pass'],
     prompt: "<p>Make this potion?</p>"
   };
