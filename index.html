@@ -100,7 +100,6 @@
   /* the trials */
 
   function loadImage(src, onload) {
-    // http://www.thefutureoftheweb.com/blog/image-onload-isnt-being-called
     var img = new Image();
     
     img.onload = onload;
@@ -114,7 +113,7 @@
     var img1 = loadImage("./img/tube.png", main);
 
     function main() {
-          ctx.drawImage(img1, 0, 0);
+          ctx.drawImage(img1, 0, 0); // there's orobably some redudant code here?
     }
 
     // part where you draw the tube content
@@ -132,7 +131,10 @@
   var trial = {
     type: jsPsychCanvasButtonResponse,
     stimulus: function(c){
-          return fillTube(c, 100, 100, 'blue')
+          fillTube(c, 100, 100, 'blue') ;
+          fillTube(c, 100, 200, 'blue') ; // not displaying side by side
+          // ideally, want four side by side, with different rect() width/length and colour parameters
+          // but rect() always positioned at bottom of img1
         },
     choices: ['Mix', 'Pass'],
     prompt: "<p>Make this potion?</p>"
