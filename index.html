@@ -99,6 +99,7 @@
 
   /* the trials */
 
+  
   function fillTube(canvas, posx, posy, width, length, color) {
     var ctx = canvas.getContext("2d");
     var img1 = new Image();
@@ -115,15 +116,14 @@
       // part where you put the tube container
       ctx.drawImage(img1,posx,posy);
     }
-        
     img1.src = './img/tube.png';
-    
   }
 
   var trial = {
     type: jsPsychCanvasButtonResponse,
     stimulus: function(c){
           fillTube(c, 0,0,100, 200, 'blue') ;
+          fillTube(c, 200,0,100,200, 'red');
         },
     choices: ['Mix', 'Pass'],
     prompt: "<p>Make this potion?</p>"
