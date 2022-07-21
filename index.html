@@ -99,42 +99,31 @@
 
   /* the trials */
 
-  function loadImage(src, onload) {
-    var img = new Image();
-    
-    img.onload = onload;
-    img.src = src;
-
-    return img;
-  }
-
-  function fillTube(canvas, width, length, color) {
+  function fillTube(canvas, posx, posy, width, length, color) {
     var ctx = canvas.getContext("2d");
-    var img1 = loadImage("./img/tube.png", main);
+    var img1 = new Image();
 
-    function main() {
-          ctx.drawImage(img1, 0, 0); // there's orobably some redudant code here?
+    img1.onload = function(){
+      // part where you draw the tube content
+      ctx.beginPath();
+      ctx.rect(posx+20, posy+20, width, length);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.fill();
+
+      // part where you put the tube container
+      ctx.drawImage(img1,posx,posy);
     }
-
-    // part where you draw the tube content
-    ctx.beginPath();
-    ctx.rect(20, 20, width, length);
-    ctx.stroke();
-
-    ctx.fillStyle = color;
-    ctx.fill();
-
-    // part where you put the tube container
-    ctx.drawImage(img1,0,0);
+        
+    img1.src = './img/tube.png';
+    
   }
 
   var trial = {
     type: jsPsychCanvasButtonResponse,
     stimulus: function(c){
-          fillTube(c, 100, 100, 'blue') ;
-          fillTube(c, 100, 200, 'blue') ; // not displaying side by side
-          // ideally, want four side by side, with different rect() width/length and colour parameters
-          // but rect() always positioned at bottom of img1
+          fillTube(c, 0,0,100, 200, 'blue') ;
         },
     choices: ['Mix', 'Pass'],
     prompt: "<p>Make this potion?</p>"
